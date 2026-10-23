@@ -1,0 +1,60 @@
+/*
+ * Tokens and reset for the whole screen. The only global CSS.
+ * CSS Modules use them with var(). Colors and spacing are set only here.
+ */
+
+:root {
+  /* Same as the canvas background. The Three.js background uses this value too */
+  --color-bg: #05070f;
+  --color-panel: rgb(14 18 34 / 72%);
+  --color-line: rgb(255 255 255 / 10%);
+  --color-ink: #e8ecf8;
+  --color-ink-sub: #8b93ad;
+  --color-accent: #3ef2ff;
+  --color-accent-soft: rgb(62 242 255 / 16%);
+
+  --radius: 8px;
+  --radius-lg: 14px;
+
+  --font-ui: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-body: 13px;
+  --font-label: 11px;
+  --font-title: 18px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+
+  --panel-width: 300px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-ui);
+  font-size: var(--font-body);
+  overflow: hidden;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}

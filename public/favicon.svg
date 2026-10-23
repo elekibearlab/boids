@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Icon: three crows flying in a line, on the dusk sky -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7c8fc4" />
+      <stop offset="0.55" stop-color="#e9a27f" />
+      <stop offset="1" stop-color="#fbd8a3" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#sky)" />
+  <g fill="none" stroke="#4a4440" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 22 l6 4 l6 -4" />
+    <path d="M26 34 l7 5 l7 -5" />
+    <path d="M40 18 l6 4 l6 -4" />
+  </g>
+</svg>

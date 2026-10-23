@@ -1,0 +1,6 @@
+dist
+node_modules
+package-lock.json
+
+# The docs have hand-made ASCII diagrams and tables, so don't format them
+*.md

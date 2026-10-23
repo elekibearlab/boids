@@ -1,0 +1,82 @@
+/* Title and 2D / 3D menu at the top. The rest is for the selected screen */
+.app {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-2) var(--space-5);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-title);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.menu {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.tab {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-ink-sub);
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--color-ink);
+}
+
+.current {
+  border-color: var(--color-accent);
+  background: var(--color-accent-soft);
+  color: var(--color-ink);
+}
+
+.tabName {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+/* Put the language switch at the right edge */
+.langs {
+  margin-left: auto;
+}
+
+.main {
+  min-height: 0;
+}
+
+/* Phones. The same width as ui/styles.module.css (media queries cannot use var()) */
+@media (max-width: 720px) {
+  .header {
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .title {
+    font-size: var(--font-body);
+    white-space: nowrap;
+  }
+
+  /* Only "2D" / "3D" fit in one row */
+  .tabDescription {
+    display: none;
+  }
+}
