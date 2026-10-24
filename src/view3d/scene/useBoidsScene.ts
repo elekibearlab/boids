@@ -12,8 +12,14 @@ import type { BoidsSceneHandle, BoidsSceneOptions } from '../types';
 const STEP_SECONDS = 1 / 60;
 /** Max time (seconds) for one frame. Keeps the flock from jumping when you come back to the tab */
 const MAX_DELTA = 0.1;
+/**
+ * Most steps in one frame. When a frame is late, catching up with more steps makes the next frame even later,
+ * and it keeps getting worse (a dense flock makes each step heavier too). Past this, the time left over is dropped,
+ * so a heavy flock plays in slow motion instead of freezing
+ */
+const MAX_STEPS_PER_FRAME = 2;
 /** How often (seconds) the numbers on the panel are updated */
-const STATS_INTERVAL = 0.2;
+const STATS_INTERVAL = 0.5;
 /** The roost is at the center of the area */
 const ROOST: Vec = { x: 0, y: 0, z: 0 };
 /** The hawk is twice as big as a crow */
@@ -55,13 +61,18 @@ export function useBoidsScene(
 ): BoidsSceneHandle {
   const flockRef = useRef(initialFlock);
   const timeRef = useRef(0);
+  const fpsRef = useRef(0);
   const stageRef = useRef<Stage | null>(null);
   // The draw loop is made only once, so it reads the latest props through a ref
   const optionsRef = useRef(options);
   optionsRef.current = options;
 
   const notify = () =>
-    optionsRef.current.onStats({ time: timeRef.current, count: flockRef.current.length });
+    optionsRef.current.onStats({
+      time: timeRef.current,
+      count: flockRef.current.length,
+      fps: fpsRef.current,
+    });
 
   const handleRef = useRef<BoidsSceneHandle>({
     step: () => {
@@ -110,6 +121,7 @@ export function useBoidsScene(
     let last = performance.now();
     let pending = 0;
     let sinceStats = 0;
+    let frames = 0;
     const loop = (now: number) => {
       const delta = Math.min((now - last) / 1000, MAX_DELTA);
       last = now;
@@ -118,13 +130,17 @@ export function useBoidsScene(
       // Move in fixed steps. Leftover time waits for the next frame
       if (running) {
         pending += delta * timeScale;
-        while (pending >= STEP_SECONDS) {
+        for (let i = 0; i < MAX_STEPS_PER_FRAME && pending >= STEP_SECONDS; i++) {
           pending -= STEP_SECONDS;
           handleRef.current.step();
         }
+        pending = Math.min(pending, STEP_SECONDS);
       }
+      frames++;
       sinceStats += delta;
       if (sinceStats >= STATS_INTERVAL) {
+        fpsRef.current = frames / sinceStats;
+        frames = 0;
         sinceStats = 0;
         notify();
       }

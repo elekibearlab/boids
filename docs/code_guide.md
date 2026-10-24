@@ -12,6 +12,7 @@ src/
   core/                Boids のロジック。React も three も import しない。まずここを読む
     boids2d.ts          3 つのルール（分離・整列・結合）→ 足し合わせ → 1 ステップ進める
     boids3d.ts          3D 版。boids2d.ts と同じ順・同じ中身。違うのはベクトルに z があることだけ
+    boids3d.wgsl        3D 版を GPU 用に書いたもの（WebGPU の compute shader）。boids3d.ts と同じ順・同じ式
     vec2.ts  vec3.ts    { x, y } / { x, y, z } と短い関数（add・sub・scale…）。式がそのまま読めるように
     params.ts           見える距離・強さ・速さの上限（2D と 3D で共通）
   data/
@@ -22,6 +23,7 @@ src/
     components/         React の部品（PascalCase.tsx だけ）
     scene/              Three.js の描画。useBoidsScene と、React を知らない描画処理（camelCase.ts だけ）
   view3d/              3D の画面（ブロックで組んだカラス。view2d と同じ並び）
+  view3dgpu/           3D GPU の画面。計算は core/boids3d.wgsl、描画も WebGPU（scene/crow.wgsl）。three はカメラと OrbitControls だけ
   ui/                  2D と 3D の両方で使う React の部品
   shared/              2D と 3D の両方で使う、部品ではない処理（言語・キーボード・空の色）
   App.tsx              タイトルと 2D / 3D のメニュー
@@ -54,12 +56,16 @@ core  →  data  →  view2d / view3d  →  App
 - `boids3d.ts` は `boids2d.ts` をそのまま写し、`Area`・`createFlock`・`avoidWalls`・`createGridSearch` の z の分だけを変える。
   ルールの関数は一字一句同じにする（`tests/boids3d.test.ts` が「z = 0 なら 2D と同じ動き」を確かめている）。
 - 全員と比べる `searchAll`（N²）が説明用の基準。速い `createGridSearch` は結果が同じことをテストで確かめる。
+- `boids3d.wgsl` は `boids3d.ts` を GPU 用に写したもの。ルールの式を変えたら両方を直す。GPU 版は全員と比べるまま（並列なので速い）。
+  GPU と CPU の結果が同じことは、ブラウザで 5 ステップ進めて比べて確かめた（差は float32 の誤差の 3×10⁻⁶ 程度）。
 
 ## 状態
 
 - 再生中・速度・強さなど UI に出す値は、各画面（`Boids2D` / `Boids3D`）の React state に置く。
 - 群れは毎フレーム変わるので React state に入れず、`useBoidsScene` の ref に持つ。描画ループも React の外で回す。
 - シミュレーションは 1/60 秒の固定ステップで進める（画面の fps によって動きが変わらないように）。
+- 1 フレームに回すステップは最大 2 回（`MAX_STEPS_PER_FRAME`）。遅れを全部取り戻そうとすると、重いほどさらに重くなるため。
+  CPU 版は群れが固まるほど近くの仲間が増えて重くなる（400 羽で 1 ステップ 4ms → 12ms）。重いときはスローモーションになる。
 - 羽数のようにシーンの作り直しが要る変更は、`BoidsCanvas` の `key` を変えて作り直す。
 
 ## 表示・見た目

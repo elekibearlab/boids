@@ -52,7 +52,7 @@ export function Boids3D() {
   const [autoRotate, setAutoRotate] = useState(true);
   const [timeScale, setTimeScale] = useState(1);
   const [display, setDisplay] = useState(NO_DISPLAY);
-  const [stats, setStats] = useState<FlockStats>({ time: 0, count });
+  const [stats, setStats] = useState<FlockStats>({ time: 0, count, fps: 0 });
 
   const actions = {
     choosePreset: (next: Preset) => {

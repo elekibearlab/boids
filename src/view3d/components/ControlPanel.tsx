@@ -165,7 +165,7 @@ export function ControlPanel(props: Props) {
         >
           {props.counts.map((count) => (
             <option key={count} value={count}>
-              {count}
+              {count.toLocaleString()}
             </option>
           ))}
         </Select>

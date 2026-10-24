@@ -7,6 +7,8 @@ import type { Sky } from '@/shared/sky';
 export type FlockStats = {
   time: number;
   count: number;
+  /** Frames drawn per second. Shows how heavy the work is on the CPU */
+  fps: number;
 };
 
 /** An area size to choose from on the panel */

@@ -4,6 +4,7 @@ import { useKeyboardShortcuts } from '@/shared/useKeyboardShortcuts';
 import { LanguageSwitch } from '@/ui';
 import { Boids2D } from '@/view2d/Boids2D';
 import { Boids3D } from '@/view3d/Boids3D';
+import { Boids3DGpu } from '@/view3dgpu/Boids3DGpu';
 import styles from './App.module.css';
 
 /** Screens in the menu. Saved in the URL # so a reload opens the same screen */
@@ -18,14 +19,25 @@ const MODES = [
     name: '3D',
     description: { ja: '空を飛ぶブロックのカラス', en: 'Block crows flying in the sky' },
   },
+  {
+    id: '3d-gpu',
+    name: '3D GPU',
+    description: { ja: 'WebGPU で最適化した 3D', en: '3D optimized with WebGPU' },
+  },
 ] as const;
 
 type Mode = (typeof MODES)[number]['id'];
 
 /** Gets the screen from the URL #. Uses 2D if the value is unknown */
 function modeFromHash(): Mode {
-  return location.hash === '#3d' ? '3d' : '2d';
+  return MODES.find((item) => `#${item.id}` === location.hash)?.id ?? '2d';
 }
+
+/** The screen for each menu item */
+const SCREENS = { '2d': Boids2D, '3d': Boids3D, '3d-gpu': Boids3DGpu } satisfies Record<
+  Mode,
+  () => React.JSX.Element
+>;
 
 export function App() {
   const [mode, setMode] = useState(modeFromHash);
@@ -41,8 +53,11 @@ export function App() {
     location.hash = next;
   };
 
+  const Screen = SCREENS[mode];
+
   useKeyboardShortcuts({
-    KeyM: () => choose(mode === '2d' ? '3d' : '2d'),
+    // M goes to the next screen in the menu, and back to the first after the last
+    KeyM: () => choose(MODES[(MODES.findIndex((item) => item.id === mode) + 1) % MODES.length].id),
   });
 
   return (
@@ -64,7 +79,9 @@ export function App() {
         </nav>
         <LanguageSwitch className={styles.langs} />
       </header>
-      <main className={styles.main}>{mode === '2d' ? <Boids2D /> : <Boids3D />}</main>
+      <main className={styles.main}>
+        <Screen />
+      </main>
     </div>
   );
 }

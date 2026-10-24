@@ -58,6 +58,16 @@ export function paintSky(sky: Sky): HTMLCanvasElement {
 }
 
 /**
+ * The same sky as a CSS gradient. The WebGPU screen draws the crows on a clear canvas, with this behind it.
+ *
+ * @param sky Which sky
+ */
+export function skyCss(sky: Sky): string {
+  const { stops } = SKIES.find((item) => item.id === sky)!;
+  return `linear-gradient(${stops.map(([offset, color]) => `${color} ${offset * 100}%`).join(', ')})`;
+}
+
+/**
  * The horizon color of a sky, for the 3D fog.
  *
  * @param sky Which sky
