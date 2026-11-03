@@ -6,6 +6,10 @@ A sample that recreates a flock of crows with Three.js, using the Boids algorith
 The menu at the top switches between 2D, 3D and 3D GPU.\
 Featured on the YouTube channel "Elekibear Digital Lab".
 
+- **Try it in your browser**
+  - [lab.elekibear.com/en/demos/boids/](https://lab.elekibear.com/en/demos/boids/)
+
+
 | | | |
 |---|---|---|
 | ![2D](docs/images/2d.png) | ![3D](docs/images/3d.png) | ![3D GPU](docs/images/3d-gpu.png) |

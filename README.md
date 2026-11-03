@@ -6,6 +6,9 @@ Boidsアルゴリズムを使って、カラスの群れを Three.js で再現�
 画面上部のメニューで 2D・3D・3D GPU を切り替えて遊べます。\
 YouTube チャンネル「エレキベアのデジタルラボ」で紹介しています。
 
+- **ブラウザで触る**: 
+  - [lab.elekibear.com/demos/boids/](https://lab.elekibear.com/demos/boids/)
+
 | | | |
 |---|---|---|
 | ![2D](docs/images/2d.png) | ![3D](docs/images/3d.png) | ![3D GPU](docs/images/3d-gpu.png) |
