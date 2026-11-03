@@ -14,8 +14,7 @@ Featured on the YouTube channel "Elekibear Digital Lab".
 ## Features
 
 - **Basic rules**
-  - Separation only, alignment only, cohesion only, or all three
-  - Change the weight of each rule with a slider
+  - Separation, alignment, cohesion
 - **Extra rules**
   - Flee a predator (2D: the cursor, 3D: a hawk)
   - Swirl around the roost
@@ -92,10 +91,8 @@ alignment(self, others, radius)   // their average velocity − my velocity
 cohesion(self, others, radius)    // their average position − my position
 ```
 
-Each one times its weight, added up, is the "steering force". `step` adds it to the velocity, keeps the speed between the limits, then moves the position.
-
-The 2D and 3D files are in the same order, so side by side you can read what changes in 3D (only a z is added to the vectors).\
-The screens (`src/view2d/`, `src/view3d/`) only draw the results of `core` with Three.js.
+Each one times its weight, added up, is the final force (the "steering force").\
+`step` adds it to the velocity, keeps the speed between the limits, then moves the position.
 
 ## References
 
